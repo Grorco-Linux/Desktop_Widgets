@@ -54,10 +54,11 @@ class BaseDial(QWidget):
 
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.update)
+        timer.timeout.connect(self.showmini)
         timer.start(self.refreshrate)
 
+        # This is the part to make the application act as an overlay
 
-        self.label.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
         self.setAttribute(QtCore.Qt.WA_NoSystemBackground, True)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(
@@ -65,8 +66,7 @@ class BaseDial(QWidget):
             QtCore.Qt.CustomizeWindowHint |
             QtCore.Qt.FramelessWindowHint |
             QtCore.Qt.WindowStaysOnBottomHint |
-            QtCore.Qt.X11BypassWindowManagerHint
-
+            QtCore.Qt.SplashScreen
         )
 
 
@@ -81,7 +81,19 @@ class BaseDial(QWidget):
     def monitor(self):
         return 0
 
+    def showmini(self):
+        if self.isMinimized():
+            print(self.isMinimized(), self.isHidden())
+            self.setWindowState(QtCore.Qt.WindowMaximized)
+            self.setWindowState(QtCore.Qt.WindowNoState)
+
+
+            print(self.isMinimized())
+
     def paintEvent(self, QPaintEvent):
+
+
+        QAction("Show")
 
         painter = QPainter()
         painter.begin(self)
@@ -118,6 +130,8 @@ class BaseDial(QWidget):
         position = QtCore.QPoint(event.globalPos() - self.oldPosition)
         self.move(self.x() + position.x(), self.y() + position.y())
         self.oldPosition = event.globalPos()
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

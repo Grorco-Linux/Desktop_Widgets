@@ -1,3 +1,4 @@
+
 #!/usr/bin/python3.5
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,13 +20,20 @@ import Base_Desktop_Dial_Meter as base
 import psutil
 import sys
 
+
 class CPU_GUI(base.BaseDial):
+
     def __init__(self):
-        super().__init__(sidelength=100, refreshrate=50, ticklength=10, monitortext='GPU')
+        super().__init__(sidelength=100, refreshrate=50, ticklength=10, monitortext='CPU')
         self.cpu_list = []
 
 
+
     def monitor(self):
+        try:
+            type(self.cpu_list)
+        except AttributeError:
+            self.cpu_list = []
         if len(self.cpu_list) < 50:
             self.cpu_list.append(psutil.cpu_percent(0))
         else:
@@ -45,4 +53,3 @@ if __name__ == '__main__':
     app = base.QApplication(sys.argv)
     ex = CPU_GUI()
     sys.exit(app.exec_())
-
